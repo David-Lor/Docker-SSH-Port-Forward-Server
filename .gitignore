@@ -1,0 +1,7 @@
+sshkey*
+ssh_key*
+*.priv
+*.pem
+*.pub
+*.key
+docs/diagram.xml

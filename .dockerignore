@@ -1,0 +1,7 @@
+# This DockerIgnore works as an allowlist (all files are ignored, except those defined here, starting with ! )
+*
+
+!Dockerfile
+!sshd_config
+!*.sh
+!LICENSE.md
