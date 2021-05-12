@@ -5,3 +5,5 @@ ssh_key*
 *.pub
 *.key
 docs/diagram.xml
+.idea/
+.vscode/
