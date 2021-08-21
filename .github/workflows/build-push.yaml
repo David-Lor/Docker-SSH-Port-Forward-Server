@@ -2,7 +2,7 @@ name: Build & Push
 on:
   push:
     branches:
-      - master
+      - main
       - develop
 
 jobs:
@@ -15,8 +15,8 @@ jobs:
         uses: actions/checkout@v2
 
       # Set Docker image tag
-      - name: Docker image tag version (on master branch push) to file
-        if: github.ref == 'refs/heads/master'
+      - name: Docker image tag version (on main branch push) to file
+        if: github.ref == 'refs/heads/main'
         run: "echo latest > /tmp/docker_tag_version.txt"
       - name: Docker image tag version (on develop branch push) to file
         if: github.ref == 'refs/heads/develop'
