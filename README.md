@@ -9,7 +9,7 @@ Dockerized SSH server that only allows TCP local and remote port forwarding. Ima
 Assuming you have a public key file `sshkey.pub` within the current working directory:
 
 ```bash
-docker run -d --name=ssh-portforwarding-server -p 2222:2222 -v "$(pwd)/sshkey.pub:/ssh_pubkey:ro" davidlor/ssh-port-forward-server
+docker run -d --name=ssh-portforwarding-server -p 2222:2222 -v "$(pwd)/sshkey.pub:/ssh_pubkey:ro" davidlor/ssh-port-forward-server:dev
 ```
 
 Keep in mind that this image:
@@ -18,6 +18,7 @@ Keep in mind that this image:
 - Expects a public ssh key in container path `/ssh_pubkey` by default
 - Does not allow root login; must use the `ssh` user to connect
 - Does not allow interactive/shell connections; must use the `-N` option on the ssh client
+- "latest" image tag version corresponds with the [main branch](https://github.com/David-Lor/Docker-SSH-Port-Forward-Server/tree/main), while "dev" tag version corresponds with the [develop branch](https://github.com/David-Lor/Docker-SSH-Port-Forward-Server/tree/develop)
 
 ## Example
 
