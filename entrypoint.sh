@@ -2,9 +2,5 @@
 
 set -ex
 
-cd /etc/ssh
-ssh-keygen -A
-
-echo "$(cat /ssh_pubkey)" > /home/ssh/.ssh/authorized_keys
-
+python -u /setup.py
 exec /usr/sbin/sshd -D -e $@
