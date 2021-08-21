@@ -2,6 +2,8 @@
 
 ## dev
 
+- Allow setting SSH server port
+- Change base image to python:3-alpine, and setup in Python script
 - Add multiarch support
 
 ## 0.0.2

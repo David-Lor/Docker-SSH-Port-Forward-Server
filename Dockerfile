@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM python:3-alpine
 
 ARG USERNAME=ssh
 
@@ -8,7 +8,10 @@ RUN addgroup ${USERNAME} && adduser ${USERNAME} -D -G ${USERNAME} --shell=/bin/f
     mkdir -p /home/${USERNAME}/.ssh && touch /home/${USERNAME}/.ssh/authorized_keys && \
     chown -R ${USERNAME}:${USERNAME} /home/${USERNAME}/.ssh && chmod 600 /home/${USERNAME}/.ssh/authorized_keys
 
-COPY "./sshd_config" "/etc/ssh/sshd_config"
-COPY --chown=${USERNAME}:${USERNAME} "./entrypoint.sh" "/entrypoint.sh"
+COPY --chown=${USERNAME}:${USERNAME} "./entrypoint.sh" "./setup.py" /
 
 CMD ["sh", "/entrypoint.sh"]
+
+ENV SSH_PORT="2222" \
+    SSH_PUBKEYS_LOCATION="/ssh_pubkey" \
+    SSH_USER=${USERNAME}
