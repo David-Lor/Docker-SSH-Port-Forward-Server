@@ -28,7 +28,7 @@ An example with all the steps involving a complete deployment of a SSH port forw
 You can connect locally to a deployed SSH server, without a Docker client container, with the following command:
 
 ```bash
-ssh -N -L <local port>:<target host>:<target port> ssh@<ssh server host> -p 2222
+ssh -N -L <local port>:<target host>:<target port> ssh@<ssh server host> -i <private key> -p 2222
 ```
 
 ## Configuration
@@ -37,6 +37,7 @@ Currently, the settings are provided through environment variables, which are th
 
 - **SSH_PORT**: SSH server port (default: `2222`)
 - **SSH_PUBKEYS_LOCATION**: path of the file where public keys are read from (default: `/ssh_pubkey`)
+- **ALLOW_MAPPING**: any variable whose name starts with "ALLOW_MAPPING" can be used for restricting which `host:port` can be forwarded through the server. Multiple mappings can be defined on a single variable splitting them with `;` (spaces ignored). If any of these variables are defined, all forwardings are allowed.
 
 The files required for the server to work are:
 
@@ -45,3 +46,5 @@ The files required for the server to work are:
 ## TODO
 
 - Allow providing ssh public key/s through environment variable
+- Allow providing custom sshd_config file, disabling auto-generation of it
+- Allow setting and/or persisting server host keys

@@ -3,13 +3,15 @@
 import os
 import sys
 import subprocess
-from typing import Optional
+from typing import Optional, List
 
 
 class SettingsConst:
     ssh_port = "SSH_PORT"
     ssh_pubkeys_location = "SSH_PUBKEYS_LOCATION"
     ssh_user = "SSH_USER"
+    ssh_mapping_allowed_prefix = "ALLOW_MAPPING"
+    mappings_split_char = ";"
 
 
 SSHD_CONFIG_PATH = "/etc/ssh/sshd_config"
@@ -22,12 +24,17 @@ PubkeyAuthentication yes
 AllowUsers ssh
 AllowGroups ssh
 
-Match User ssh
-    AllowTcpForwarding yes
-    GatewayPorts yes
-    X11Forwarding no
-    PermitTTY no
+AllowTcpForwarding yes
+GatewayPorts yes
+X11Forwarding no
+PermitTTY no
 """
+
+
+class Mapping:
+    def __init__(self, host, port):
+        self.host = host
+        self.port = int(port)
 
 
 class Settings:
@@ -43,6 +50,24 @@ class Settings:
             print(f"The environment variable {key} is not set!")
             sys.exit(1)
         return value
+
+    @staticmethod
+    def get_allowed_mappings() -> List[Mapping]:
+        mappings = list()
+        for key, value in os.environ.items():
+            if not key.startswith(SettingsConst.ssh_mapping_allowed_prefix):
+                continue
+
+            for chunk in value.split(SettingsConst.mappings_split_char):
+                try:
+                    host, port = chunk.split(":")
+                    mapping = Mapping(host, port)
+                    print("Allowed mapping detected:", mapping.__dict__)
+                    mappings.append(mapping)
+                except ValueError:
+                    print(f"Invalid allowed mapping given: \"{chunk}\"")
+
+        return mappings
 
 
 def _generate_host_keys():
@@ -65,7 +90,14 @@ def _format_sshd_config(settings: Settings) -> str:
     format_map = {
         SettingsConst.ssh_port: settings.port
     }
-    return SSHD_CONFIG_TEMPLATE.format_map(format_map).strip()
+    content = SSHD_CONFIG_TEMPLATE.format_map(format_map)
+
+    allowed_mappings = settings.get_allowed_mappings()
+    if allowed_mappings:
+        allowed_mappings_strs = [f"{mapping.host}:{mapping.port}" for mapping in allowed_mappings]
+        content += f"\nPermitOpen {' '.join(allowed_mappings_strs)}"
+
+    return content
 
 
 def _write_sshd_config(content: str):
