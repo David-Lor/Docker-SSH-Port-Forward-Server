@@ -72,13 +72,6 @@ If you want to connect locally, without a Docker client container:
 ssh -N -L <local port>:<target host>:<target port> ssh@<ssh server host> -p 2222
 ```
 
-## Changelog
-
-- 0.0.2
-    - Write/override instead of appending keys on authorized_keys file
-- 0.0.1
-    - Initial release: functional local/remote port forwarding through the SSH server
-
 ## TODO
 
 - Allow providing ssh public key/s through environment variable
