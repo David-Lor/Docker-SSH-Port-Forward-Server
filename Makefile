@@ -23,5 +23,8 @@ rm: ## remove existing container
 attach-it: ## attach to existing container on interactive mode
 	docker exec -it ${IMAGE_TAG} bash
 
+test: ## run test script
+	SSH_SERVER_IMAGE=${IMAGE_TAG} bash tools/test.sh
+
 help: ## show this help.
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'

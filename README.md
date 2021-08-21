@@ -23,50 +23,9 @@ Keep in mind that this image:
 
 ![Diagram](docs/diagram.png)
 
-```bash
-# Create public & private keys
-ssh-keygen -f ./sshkey -q -N ""
+An example with all the steps involving a complete deployment of a SSH port forwarding server, client, upstream server and downstream client are available on the [test script](tools/test.sh).
 
-# Create networks
-docker network create ssh-portforwarding-network-a
-docker network create ssh-portforwarding-network-b
-docker network create ssh-portforwarding-network-trunk
-
-# Create SSH Server container
-docker run -d --name=ssh-portforwarding-A-server \
-    --network=ssh-portforwarding-network-trunk \
-    -v "$(pwd)/sshkey.pub:/ssh_pubkey:ro" \
-    davidlor/ssh-port-forward-server
-docker network connect ssh-portforwarding-network-a ssh-portforwarding-A-server
-
-# Create Nginx Server container
-docker run -d --name=ssh-portforwarding-A-nginx \
-    --network=ssh-portforwarding-network-a \
-    nginxdemos/hello
-
-# Create SSH Client container
-docker run -d --name=ssh-portforwarding-B-client \
-    --network=ssh-portforwarding-network-trunk \
-    -e MAPPINGS="80:ssh-portforwarding-A-nginx:80" \
-    -e "SSH_HOST=ssh-portforwarding-A-server" \
-    -e "SSH_PORT=2222" \
-    -e "SSH_USER=ssh" \
-    -v "$(pwd)/sshkey:/ssh_key:ro" \
-    davidlor/ssh-port-forward-client
-docker network connect ssh-portforwarding-network-b ssh-portforwarding-B-client
-
-# Run HTTP Client container
-docker run --rm --network=ssh-portforwarding-network-b curlimages/curl \
-    curl http://ssh-portforwarding-B-client:80
-# If everything worked, you should be able to see some HTML
-
-# Teardown all
-docker stop ssh-portforwarding-B-client ssh-portforwarding-A-nginx ssh-portforwarding-A-server
-docker rm ssh-portforwarding-B-client ssh-portforwarding-A-nginx ssh-portforwarding-A-server
-docker network rm ssh-portforwarding-network-a ssh-portforwarding-network-b ssh-portforwarding-network-trunk
-```
-
-If you want to connect locally, without a Docker client container:
+You can connect locally to a deployed SSH server, without a Docker client container, with the following command:
 
 ```bash
 ssh -N -L <local port>:<target host>:<target port> ssh@<ssh server host> -p 2222
