@@ -50,9 +50,10 @@ docker network connect ${NETWORK_B} ${CONTAINER_SSH_CLIENT}
 docker run --rm --network=${NETWORK_B} curlimages/curl \
     curl "http://$CONTAINER_SSH_CLIENT:80"
 # If everything worked, you should be able to see some HTML
+test_status=$?
 
 # Press enter to continue if HTTP Client container failed execution (for manually reviewing containers before teardown)
-if [ $? -ne 0 ]
+if [ $test_status -ne 0 ]
 then
   echo "Press Enter to continue with teardown"
   read -r
@@ -63,3 +64,5 @@ docker stop ${CONTAINER_UPSTREAM_SERVER} ${CONTAINER_SSH_CLIENT} ${CONTAINER_SSH
 docker rm ${CONTAINER_UPSTREAM_SERVER} ${CONTAINER_SSH_CLIENT} ${CONTAINER_SSH_SERVER}
 docker network rm ${NETWORK_A} ${NETWORK_B} ${NETWORK_TRUNK}
 rm -rf ${SSH_KEYS_LOCATION}
+
+exit $test_status
