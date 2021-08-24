@@ -2,6 +2,6 @@
 *
 
 !Dockerfile
-!sshd_config
-!*.sh
+!entrypoint.sh
+!setup.py
 !LICENSE.md
