@@ -1,6 +1,6 @@
 # Changelog
 
-## dev
+## 0.1.1
 
 - Allow setting allowed forwarding ports mappings
 - Allow setting SSH server port
