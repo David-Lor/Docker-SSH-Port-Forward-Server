@@ -2,8 +2,7 @@ name: Build & Push
 on:
   push:
     branches:
-      - main
-      - develop
+      - '**'
   workflow_dispatch:
     inputs:
       tag_version:
@@ -14,6 +13,9 @@ jobs:
   build-push:
     name: Build & Push
     runs-on: ubuntu-latest
+    # Only run on main/develop push, or workflow_dispatch
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop' || github.event.inputs.tag_version
+
     steps:
       # Setup
       - name: Checkout code
