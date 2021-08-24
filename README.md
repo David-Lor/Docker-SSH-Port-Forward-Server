@@ -1,5 +1,8 @@
 # Docker SSH Port Forward Server
 
+[![Docker Hub](https://img.shields.io/badge/%20-DockerHub-blue?logo=docker&style=plastic)](https://hub.docker.com/r/davidlor/ssh-port-forward-server)
+![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/davidlor/ssh-port-forward-server?sort=date&style=plastic)
+
 Dockerized SSH server that only allows TCP local and remote port forwarding. Image based on `python:3-alpine`. The [ssh-port-forward-client](https://github.com/David-Lor/Docker-SSH-Port-Forward-Client) image can be used for connecting to the server.
 
 **This image is experimental and might have undesirable effects. Use it under your responsability!**
@@ -19,6 +22,7 @@ Keep in mind that this image:
 - Does not allow root login; must use the `ssh` user to connect
 - Does not allow interactive/shell connections; must use the `-N` option on the ssh client
 - "latest" image tag version corresponds with the [main branch](https://github.com/David-Lor/Docker-SSH-Port-Forward-Server/tree/main), while "dev" tag version corresponds with the [develop branch](https://github.com/David-Lor/Docker-SSH-Port-Forward-Server/tree/develop)
+- Builds are available for **linux/amd64** and **linux/arm/v7**. If you encounter problems running a container on armv7, take a look at [this issue](https://github.com/docker-library/python/issues/637#issuecomment-904544160).
 
 ## Example
 
